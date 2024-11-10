@@ -1,6 +1,10 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use App\Http\controllers\UserController;
+use App\Http\controllers\ProductController;
+use App\Http\controllers\Auth\RegisterController;
+use App\Http\controllers\Auth\loginController;
 
 /*
 |--------------------------------------------------------------------------
@@ -13,22 +17,37 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
+
+
+
+
+
 Route::get('/', function () {
     return view('index');
 })->name('home');
 
-Route::get('admin/login', function () {
-    return view('admin-panel.login');
-})->name('admin.login');
 
-Route::get('admin/register', function () {
-    return view('admin-panel.register');
-})->name('admin.register');
+/* Register Routes */ 
+
+Route::get('admin/register', [RegisterController::class, 'create'])->name('admin.register');
+Route::post('admin/register', [RegisterController::class, 'store'])->name('admin.register');
+
+/* Login Routes */ 
+
+Route::get('admin/login', [loginController::class, 'create'])->name('login');
+Route::post('admin/login', [loginController::class, 'login'])->name('login');
+Route::get('logout', [loginController::class, 'logout'])->name('logout');
 
 
-Route::get('admin/dashboard', function () {
-    return view('admin-panel.layouts.app');
-})->name('admin.dashboard');
+Route::middleware('auth')->group(function(){
+    Route::get('admin/dashboard', function () {
+        return view('admin-panel.layouts.app');
+    })->name('admin.dashboard');
+    Route::get('users/list', [UserController::class, 'index'])->name('users.list');
+    Route::get('products/list', [ProductController::class, 'index'])->name('products.list');
+    Route::get('product/create', [ProductController::class, 'create'])->name('product.create');
+});
+
 
 
 Route::get('/shop', function () {

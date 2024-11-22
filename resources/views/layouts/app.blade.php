@@ -1,3 +1,8 @@
+@php
+use App\Models\Cart;
+    $cart_count = Cart::where('user_id', Auth::id())->count();
+@endphp
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -21,12 +26,14 @@
         <link href="{{asset('lib/lightbox/css/lightbox.min.css')}}" rel="stylesheet">
         <link href="{{asset('lib/owlcarousel/assets/owl.carousel.min.css')}}" rel="stylesheet">
 
-
         <!-- Customized Bootstrap Stylesheet -->
         <link href="{{asset('css/bootstrap.min.css')}}" rel="stylesheet">
+        
+        <link href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css" rel="stylesheet">    
 
         <!-- Template Stylesheet -->
         <link href="{{('css/style.css')}}" rel="stylesheet">
+        @stack('style')
     </head>
 
     <body>
@@ -167,6 +174,25 @@
 
     <!-- Template Javascript -->
     <script src="{{asset('js/main.js')}}"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
+    @stack('scripts')
+
+    <script>
+        $(document).on('click', '.add_to_cart',  function(){
+            var prod_id = $(this).data('prod_id');
+            $.ajax({
+                url: "{{route('add.cart')}}",
+                type: 'GET',
+                data: {prod_id, prod_id},
+                success:function(response){
+                    if(response.success){
+                        toastr.success(response.message);
+                        $(document).find('.cart_counter').text(response.cart_counter);
+                    }
+                }
+            });
+        });
+    </script>
     </body>
 
 </html>

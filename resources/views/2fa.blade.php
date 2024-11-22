@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>{{env('APP_NAME')}}</title>
+  <title>AdminLTE 3 | Dashboard</title>
 
   <!-- Google Font: Source Sans Pro -->
   <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
@@ -25,8 +25,6 @@
   <link rel="stylesheet" href="{{asset('admin-panel/plugins/daterangepicker/daterangepicker.css')}}">
   <!-- summernote -->
   <link rel="stylesheet" href="{{asset('admin-panel/plugins/summernote/summernote-bs4.min.css')}}">
-  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 </head>
 <body class="hold-transition sidebar-mini layout-fixed">
 <div class="wrapper">
@@ -36,32 +34,145 @@
     <img class="animation__shake" src="{{asset('admin-panel/dist/img/AdminLTELogo.png')}}" alt="AdminLTELogo" height="60" width="60">
   </div>
 
-  <!-- Navbar -->
-  @include('admin-panel.layouts.navbar')
-  <!-- /.navbar -->
-
-  <!-- Main Sidebar Container -->
-  @include('admin-panel.layouts.sidebar')
-
-  <!-- Content Wrapper. Contains page content -->
   
-  @yield('content')
+  <div class="container" style="margin-top:170px;">
+
+<div class="row justify-content-center">
+
+    <div class="col-md-8">
+
+        <div class="card">
+
+            <div class="card-header">Two Factor Authentication</div>
+
+
+
+            <div class="card-body">
+
+                <form method="POST" action="{{ route('2fa.post') }}">
+
+                    @csrf
+
+
+
+                    <p class="text-center">We sent code to your phone : {{ substr(auth()->user()->phone, 0, 5) . '******' . substr(auth()->user()->phone,  -2) }}</p>
+
+
+
+                    @if ($message = Session::get('success'))
+
+                        <div class="row">
+
+                          <div class="col-md-12">
+
+                              <div class="alert alert-success alert-block">
+
+                                <button type="button" class="close" data-dismiss="alert">×</button> 
+
+                                  <strong>{{ $message }}</strong>
+
+                              </div>
+
+                          </div>
+
+                        </div>
+
+                    @endif
+
+
+
+                    @if ($message = Session::get('error'))
+
+                        <div class="row">
+
+                          <div class="col-md-12">
+
+                              <div class="alert alert-danger alert-block">
+
+                                <button type="button" class="close" data-dismiss="alert">×</button> 
+
+                                  <strong>{{ $message }}</strong>
+
+                              </div>
+
+                          </div>
+
+                        </div>
+
+                    @endif
+
+
+
+                    <div class="form-group row">
+
+                        <label for="code" class="col-md-4 col-form-label text-md-right">Code</label>
+
+
+
+                        <div class="col-md-6">
+
+                            <input id="code" type="number" class="form-control @error('code') is-invalid @enderror" name="code" value="{{ old('code') }}" required autocomplete="code" autofocus>
+
+
+
+                            @error('code')
+
+                                <span class="invalid-feedback" role="alert">
+
+                                    <strong>{{ $message }}</strong>
+
+                                </span>
+
+                            @enderror
+
+                        </div>
+
+                    </div>
+
+
+
+                    <div class="form-group row mb-0">
+
+                        <div class="col-md-8 offset-md-4">
+
+                            <a class="btn btn-link" href="{{ route('2fa.resend') }}">Resend Code?</a>
+
+                        </div>
+
+                    </div>
+
+
+
+                    <div class="form-group row mb-0">
+
+                        <div class="col-md-8 offset-md-4">
+
+                            <button type="submit" class="btn btn-primary">
+
+                                Submit
+
+                            </button>
+
+
+
+                        </div>
+
+                    </div>
+
+                </form>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+</div>
+
   <!-- /.content-wrapper -->
   
-  <footer class="main-footer">
-    <strong>Copyright &copy; 2014-2021 <a href="https://adminlte.io">{{env('APP_NAME')}}</a>.</strong>
-    All rights reserved.
-    <div class="float-right d-none d-sm-inline-block">
-      <b>Version</b> 3.2.0
-    </div>
-  </footer>
-  <!-- Control Sidebar -->
-  <aside class="control-sidebar control-sidebar-dark">
-    <!-- Control sidebar content goes here -->
-  </aside>
-  <!-- /.control-sidebar -->
-
-
 </div>
 <!-- ./wrapper -->
 
@@ -99,7 +210,5 @@
 <script src="{{asset('admin-panel/dist/js/demo.js')}}"></script>
 <!-- AdminLTE dashboard demo (This is only for demo purposes) -->
 <script src="{{asset('admin-panel/dist/js/pages/dashboard.js')}}"></script>
-
-@stack('scripts')
 </body>
 </html>

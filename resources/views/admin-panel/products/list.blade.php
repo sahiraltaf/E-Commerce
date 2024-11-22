@@ -32,42 +32,33 @@
                 <table id="example2" class="table table-bordered table-hover">
                   <thead>
                   <tr>
-                    <th>Rendering engine</th>
-                    <th>Browser</th>
-                    <th>Platform(s)</th>
-                    <th>Engine version</th>
-                    <th>CSS grade</th>
+                    <th>Title</th>
+                    <th>Price</th>
+                    <th>Discount Price</th>
+                    <th>Product Category Id</th>
+                    <th>Product Sub Category Id</th>
+                    <th>Image</th>                    
                   </tr>
                   </thead>
                   <tbody>
+                  @foreach($products as $product)
                   <tr>
-                    <td>Trident</td>
-                    <td>Internet
-                      Explorer 4.0
-                    </td>
-                    <td>Win 95+</td>
-                    <td> 4</td>
-                    <td>X</td>
+                    @php
+                      $category =App\Models\Category::find($product->category_id);
+                    @endphp
+                    <td>{{$product->title}}</td>
+                    <td>{{$product->price}}</td>
+                    <td>{{$product->discount_price}}</td>
+                    <td>{{$product->category->name}}</td>
+                    <td>{{$product->subcategory->name}}</td>
+                    <td><img src="{{asset($product->image)}}" alt="" style="width:100px; height:100px;"></td>
+                    
+
                   </tr>
-                  
-                  <tr>
-                    <td>Webkit</td>
-                    <td>iPod Touch / iPhone</td>
-                    <td>iPod</td>
-                    <td>420.1</td>
-                    <td>A</td>
-                  </tr>
+                  @endforeach
                   
                   </tbody>
-                  <tfoot>
-                  <tr>
-                    <th>Rendering engine</th>
-                    <th>Browser</th>
-                    <th>Platform(s)</th>
-                    <th>Engine version</th>
-                    <th>CSS grade</th>
-                  </tr>
-                  </tfoot>
+                  
                 </table>
               </div>
               <!-- /.card-body -->
